@@ -9,27 +9,42 @@ class GuestHomeScreen extends StatelessWidget {
         title: Text('Welcome, Guest'),
         backgroundColor: Colors.cyan.shade600,
       ),
-      body: ListView(
+      body: GridView.count(
+        crossAxisCount: 2,
+        padding: EdgeInsets.all(16.0),
         children: [
-          Center(
-            child: Text(
-              'As a Guest, You have access to the map and directions.',
-              style: TextStyle(color: Colors.white),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          ListTile(
-            title: Text('Emergency Contacts', style: TextStyle(color: Colors.white)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ViewEmergencyContactsScreen(),
-                ),
-              );
-            },
-          ),
+          _buildGridButton(context, 'Emergency Contacts', Icons.security, ViewEmergencyContactsScreen()),
+          _buildGridButton(context, 'Campus Map', Icons.map, null), // Replace null with the actual screen
+          _buildGridButton(context, 'Help', Icons.help, null), // Replace null with the actual screen
         ],
+      ),
+    );
+  }
+
+  Widget _buildGridButton(BuildContext context, String title, IconData icon, Widget? navigateTo) {
+    return GestureDetector(
+      onTap: () {
+        if (navigateTo != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => navigateTo),
+          );
+        }
+      },
+      child: Container(
+        margin: EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.cyan,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 40, color: Colors.white),
+            SizedBox(height: 10),
+            Text(title, style: TextStyle(color: Colors.white, fontSize: 16)),
+          ],
+        ),
       ),
     );
   }
