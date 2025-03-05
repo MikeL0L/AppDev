@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
+import 'intro_screen.dart';
 
 void main() {
   runApp(CampusNavigatorApp());
@@ -15,7 +15,7 @@ class CampusNavigatorApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.black,
       ),
-      home: LoginScreen(),
+      home: IntroScreen(), // Set IntroScreen as the home
     );
   }
 }
