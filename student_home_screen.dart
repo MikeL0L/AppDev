@@ -22,64 +22,6 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
   String studentId = "2022300191";
   String profilePhoto = "assets/profile_photo.png"; // Placeholder for profile photo
 
-  void _navigateToViewSchedules() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ViewSchedulesScreen(
-          schedules: schedules,
-          onScheduleUpdated: (updatedSchedules) {
-            setState(() {
-              schedules = updatedSchedules;
-            });
-          },
-        ),
-      ),
-    );
-  }
-
-  void _navigateToViewAlerts() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ViewAlertsScreen(alerts: alerts),
-      ),
-    );
-  }
-
-  void _navigateToViewProfile() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ViewProfileScreen(
-          studentName: widget.studentName,
-          studentId: studentId,
-          email: email,
-          course: course,
-          profilePhoto: profilePhoto,
-        ),
-      ),
-    );
-  }
-
-  void _navigateToViewFacultyHours() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ViewFacultyHoursScreen(),
-      ),
-    );
-  }
-
-  void _navigateToViewEmergencyContacts() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ViewEmergencyContactsScreen(),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,29 +38,55 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
         centerTitle: true,
         backgroundColor: Colors.cyan.shade600,
       ),
-      body: ListView(
+      body: GridView.count(
+        crossAxisCount: 2,
+        padding: EdgeInsets.all(16.0),
         children: [
-          ListTile(
-            title: Text('View and Edit Schedules', style: TextStyle(color: Colors.white)),
-            onTap: _navigateToViewSchedules,
-          ),
-          ListTile(
-            title: Text('View Alerts for Upcoming Classes/Exams', style: TextStyle(color: Colors.white)),
-            onTap: _navigateToViewAlerts,
-          ),
-          ListTile(
-            title: Text('Access Personal Student Profile', style: TextStyle(color: Colors.white)),
-            onTap: _navigateToViewProfile,
-          ),
-          ListTile(
-            title: Text('View Faculty Office Hours', style: TextStyle(color: Colors.white)),
-            onTap: _navigateToViewFacultyHours,
-          ),
-          ListTile(
-            title: Text('Quick Access Emergency Contacts', style: TextStyle(color: Colors.white)),
-            onTap: _navigateToViewEmergencyContacts,
-          ),
+          _buildGridButton(context, 'View Schedules', Icons.schedule, ViewSchedulesScreen(schedules: schedules, onScheduleUpdated: (updatedSchedules) {
+            setState(() {
+              schedules = updatedSchedules;
+            });
+          })),
+          _buildGridButton(context, 'View Alerts', Icons.notifications, ViewAlertsScreen(alerts: alerts)),
+          _buildGridButton(context, 'Profile', Icons.person, ViewProfileScreen(
+            studentName: widget.studentName,
+            studentId: studentId,
+            email: email,
+            course: course,
+            profilePhoto: profilePhoto,
+          )),
+          _buildGridButton(context, 'Faculty Hours', Icons.access_time, ViewFacultyHoursScreen()),
+          _buildGridButton(context, 'Emergency Contacts', Icons.security, ViewEmergencyContactsScreen()),
+          _buildGridButton(context, 'Campus Map', Icons.map, null), // Replace null with the actual screen
         ],
+      ),
+    );
+  }
+
+  Widget _buildGridButton(BuildContext context, String title, IconData icon, Widget? navigateTo) {
+    return GestureDetector(
+      onTap: () {
+        if (navigateTo != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => navigateTo),
+          );
+        }
+      },
+      child: Container(
+        margin: EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.cyan,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 40, color: Colors.white),
+            SizedBox(height: 10),
+            Text(title, style: TextStyle(color: Colors.white, fontSize: 16)),
+          ],
+        ),
       ),
     );
   }
