@@ -13,7 +13,7 @@ class GuestHomeScreen extends StatelessWidget {
         crossAxisCount: 2,
         padding: EdgeInsets.all(16.0),
         children: [
-          _buildGridButton(context, 'Emergency Contacts', Icons.security, ViewEmergencyContactsScreen()),
+          _buildGridButton(context, 'Emergency #', Icons.security, ViewEmergencyContactsScreen()),
           _buildGridButton(context, 'Campus Map', Icons.map, null), // Replace null with the actual screen
           _buildGridButton(context, 'Help', Icons.help, null), // Replace null with the actual screen
         ],
