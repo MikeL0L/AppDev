@@ -56,7 +56,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
             profilePhoto: profilePhoto,
           )),
           _buildGridButton(context, 'Faculty Hours', Icons.access_time, ViewFacultyHoursScreen()),
-          _buildGridButton(context, 'Emergency Contacts', Icons.security, ViewEmergencyContactsScreen()),
+          _buildGridButton(context, 'Emergency #', Icons.security, ViewEmergencyContactsScreen()),
           _buildGridButton(context, 'Campus Map', Icons.map, null), // Replace null with the actual screen
         ],
       ),
