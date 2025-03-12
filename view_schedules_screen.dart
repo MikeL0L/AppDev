@@ -28,7 +28,18 @@ class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Schedules'),
-        backgroundColor: Colors.cyan.shade600,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(colors:  [
+                Color(0xFFFF971A),
+                Color(0xFFFFFF67),
+              ],
+                  transform: GradientRotation(24)
+              )
+          ),
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -60,16 +71,23 @@ class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
           ),
         ],
       ),
-      body: ListView.builder(
+      body: Container(
+      decoration: BoxDecoration(
+      image: DecorationImage(
+      image: AssetImage('assets/intro-background.png'),
+      fit: BoxFit.cover,
+        ),
+        ),
+      child: ListView.builder(
         itemCount: widget.schedules.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(widget.schedules[index], style: TextStyle(color: Colors.white)),
+            title: Text(widget.schedules[index], style: TextStyle(color: Colors.black)),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: Icon(Icons.edit, color: Colors.white),
+                  icon: Icon(Icons.edit, color: Colors.black),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -99,6 +117,7 @@ class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
             ),
           );
         },
+      ),
       ),
     );
   }
