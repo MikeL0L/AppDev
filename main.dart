@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'intro_screen.dart';
+import 'title_screen.dart';
 
 void main() {
   runApp(CampusNavigatorApp());
@@ -13,9 +13,9 @@ class CampusNavigatorApp extends StatelessWidget {
       title: 'Campus Navigator',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.black,
+        scaffoldBackgroundColor: Colors.white,
       ),
-      home: IntroScreen(), // Set IntroScreen as the home
+      home: TitleScreen(), // Set TitleScreen as the home
     );
   }
 }
