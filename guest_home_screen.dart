@@ -7,16 +7,35 @@ class GuestHomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Welcome, Guest'),
-        backgroundColor: Colors.cyan.shade600,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(colors:  [
+                Color(0xFFFF971A),
+                Color(0xFFFFFF67),
+              ],
+                  transform: GradientRotation(24)
+              )
+          ),
+        ),
       ),
-      body: GridView.count(
+      body: Container(
+      decoration: BoxDecoration(
+      image: DecorationImage(
+      image: AssetImage('assets/intro-background.png'),
+      fit: BoxFit.cover,
+        ),
+      ),
+      child: GridView.count(
         crossAxisCount: 2,
         padding: EdgeInsets.all(16.0),
         children: [
-          _buildGridButton(context, 'Emergency #', Icons.security, ViewEmergencyContactsScreen()),
+          _buildGridButton(context, 'Emergency Contacts', Icons.security, ViewEmergencyContactsScreen()),
           _buildGridButton(context, 'Campus Map', Icons.map, null), // Replace null with the actual screen
           _buildGridButton(context, 'Help', Icons.help, null), // Replace null with the actual screen
         ],
+      ),
       ),
     );
   }
@@ -34,7 +53,7 @@ class GuestHomeScreen extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          color: Colors.cyan,
+          color: Color(0xFF0C4B77),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
