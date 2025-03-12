@@ -10,16 +10,35 @@ class ViewAlertsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Alerts'),
-        backgroundColor: Colors.cyan.shade600,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(colors:  [
+                Color(0xFFFF971A),
+                Color(0xFFFFFF67),
+              ],
+                  transform: GradientRotation(24)
+              )
+          ),
+        ),
       ),
-      body: ListView.builder(
+        body: Container(
+        decoration: BoxDecoration(
+        image: DecorationImage(
+        image: AssetImage('assets/intro-background.png'),
+        fit: BoxFit.cover,
+          ),
+        ),
+      child: ListView.builder(
         itemCount: alerts.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(alerts[index], style: TextStyle(color: Colors.white)),
+            title: Text(alerts[index], style: TextStyle(color: Colors.black)),
           );
         },
       ),
+        ),
     );
   }
 }
