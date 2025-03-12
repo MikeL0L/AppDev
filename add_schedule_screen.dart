@@ -31,7 +31,18 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.existingSchedule == null ? 'Add Schedule' : 'Edit Schedule'),
-        backgroundColor: Colors.cyan.shade600,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(colors:  [
+                Color(0xFFFF971A),
+                Color(0xFFFFFF67),
+              ],
+                  transform: GradientRotation(24)
+              )
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -41,16 +52,16 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
               controller: _scheduleController,
               decoration: InputDecoration(
                 labelText: 'Enter your schedule',
-                labelStyle: TextStyle(color: Colors.white),
+                labelStyle: TextStyle(color: Colors.black),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
+                  borderSide: BorderSide(color: Colors.black),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
+                  borderSide: BorderSide(color: Colors.black),
                 ),
               ),
-              style: TextStyle(color: Colors.white),
-              cursorColor: Colors.white,
+              style: TextStyle(color: Colors.black),
+              cursorColor: Colors.black,
             ),
             SizedBox(height: 20),
             ElevatedButton(
