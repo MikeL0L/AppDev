@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'student_home_screen.dart';
 import 'guest_home_screen.dart';
+import 'verification_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -18,10 +18,10 @@ class _LoginScreenState extends State<LoginScreen> {
     String password = _passwordController.text;
 
     if (studentId == validStudentId && studentId == password) {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => StudentHomeScreen(studentName: validStudentName),
+          builder: (context) => VerificationScreen(),
         ),
       );
     } else {
@@ -43,56 +43,67 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Trailfinder Login', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-        centerTitle: true,
-        backgroundColor: Colors.cyan.shade600,
+      body: Container(
+      decoration: BoxDecoration(
+      image: DecorationImage(
+      image: AssetImage('assets/login-background.png'),
+      fit: BoxFit.cover,
+          ),
       ),
-      body: Padding(
+      child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('A navigation app for the University of', style: TextStyle(fontSize: 12, color: Colors.cyan.shade600)),
-            Text('Science and Technology of Southern Philippines', style: TextStyle(fontSize: 12, color: Colors.cyan.shade600)),
+            Text(
+                'TrailFinder',
+                style: TextStyle(
+                fontSize: 48,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Lobster',
+                color: Color(0xFF1C1654),
+                ),
+            ),
+            Text('A navigation app for the University of', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat', color: Colors.black)),
+            Text('Science and Technology of Southern Philippines', style: TextStyle(fontSize: 12, fontFamily: 'Montserrat', color: Colors.black)),
             SizedBox(height: 25),
             TextField(
               controller: _idController,
               decoration: InputDecoration(
                 labelText: 'Enter Student ID',
-                labelStyle: TextStyle(fontSize: 15, color: Colors.white),
+                labelStyle: TextStyle(fontSize: 15, color: Colors.black),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
+                  borderSide: BorderSide(color: Colors.black),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
+                  borderSide: BorderSide(color: Colors.black),
                 ),
               ),
               keyboardType: TextInputType.number,
               maxLength: 10,
-              style: TextStyle(fontSize: 15, color: Colors.white),
-              cursorColor: Colors.white,
+              style: TextStyle(fontSize: 15, color: Colors.black),
+              cursorColor: Colors.black,
             ),
             SizedBox(height: 10),
             TextField(
               controller: _passwordController,
               decoration: InputDecoration(
                 labelText: 'Password',
-                labelStyle: TextStyle(fontSize: 15, color : Colors.white),
+                labelStyle: TextStyle(fontSize: 15, color : Colors.black),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
+                  borderSide: BorderSide(color: Colors.black),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
+                  borderSide: BorderSide(color: Colors.black),
                 ),
               ),
               keyboardType: TextInputType.number,
               maxLength: 10,
-              style: TextStyle(fontSize: 15, color: Colors.white),
-              cursorColor: Colors.white,
+              style: TextStyle(fontSize: 15, color: Colors.black),
+              cursorColor: Colors.black,
               obscureText: true,
             ),
-            Text('If not Student, Enter as Guest', style: TextStyle(fontSize: 13, color: Colors.white)),
+            Text('If not Student, Enter as Guest', style: TextStyle(fontSize: 13, color: Colors.black)),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: _login,
@@ -105,6 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }
