@@ -33,17 +33,24 @@ class _IntroScreenState extends State<IntroScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
+        body: Container(
+        decoration: BoxDecoration(
+        image: DecorationImage(
+        image: AssetImage('assets/intro-background.png'),
+    fit: BoxFit.cover,
+    ),
+    ),
+      child: PageView(
         controller: _pageController,
         onPageChanged: _onPageChanged,
         children: [
           _buildPage(
-            title: "Navigate Your Campus Like a Pro",
-            description: "Find buildings, lecture halls, and student services in just a tap.",
+            title: "Navigate Your Campus Like a Pro!",
+            description: "Find buildings, lecture halls, and student services in just a few taps.",
             showSkipButton: true,
           ),
           _buildPage(
-            title: "Find Your Campus Effortlessly",
+            title: "Find Your Campus, Effortlessly!",
             description: "Navigate your university with ease and confidence.",
             showSkipButton: true,
           ),
@@ -55,12 +62,12 @@ class _IntroScreenState extends State<IntroScreen> {
           ),
         ],
       ),
+        ),
     );
   }
 
   Widget _buildPage({required String title, required String description, bool showSkipButton = false, bool isLastPage = false}) {
     return Container(
-      color: Colors.black,
       padding: EdgeInsets.all(16.0),
       child: Center( // Center the content both horizontally and vertically
         child: Column(
@@ -69,20 +76,21 @@ class _IntroScreenState extends State<IntroScreen> {
           children: [
             Text(
               title,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 36, fontFamily: 'Montserrat Bold', color: Colors.black),
+              textAlign: TextAlign.left,
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 5),
             Text(
               description,
-              style: TextStyle(fontSize: 16, color: Colors.white),
-              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 12, fontFamily: 'Poppins', color: Colors.black),
+              textAlign: TextAlign.left,
             ),
             SizedBox(height: 40), // Add space between text and buttons
             if (showSkipButton)
               TextButton(
                 onPressed: _skipToLogin,
-                child: Text("Skip", style: TextStyle(fontSize: 20, color: Colors.cyan)),
+                child: Text("Skip", style: TextStyle(fontSize: 20, color: Color(0xFF0C4B77)),
+              ),
               ),
             if (isLastPage)
               ElevatedButton(
