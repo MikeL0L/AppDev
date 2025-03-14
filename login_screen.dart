@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:student_nav_system/main/custom_page_route.dart';
 import 'guest_home_screen.dart';
 import 'verification_screen.dart';
 
@@ -20,9 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (studentId == validStudentId && studentId == password) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => VerificationScreen(),
-        ),
+        CustomPageRoute(page: VerificationScreen()),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -34,8 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void _loginAsGuest() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => GuestHomeScreen(),
+      CustomPageRoute(
+        page: GuestHomeScreen(),
       ),
     );
   }
