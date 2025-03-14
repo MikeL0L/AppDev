@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:student_nav_system/main/custom_page_route.dart';
 import 'login_screen.dart';
 
 class IntroScreen extends StatefulWidget {
@@ -19,14 +20,14 @@ class _IntroScreenState extends State<IntroScreen> {
   void _skipToLogin() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
+      CustomPageRoute(page: LoginScreen()),
     );
   }
 
   void _proceedToLogin() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
+      CustomPageRoute(page: LoginScreen()),
     );
   }
 
