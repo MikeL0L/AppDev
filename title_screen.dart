@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:student_nav_system/main/custom_page_route.dart';
 import 'intro_screen.dart';
 
 class TitleScreen extends StatelessWidget {
@@ -48,7 +49,7 @@ class TitleScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => IntroScreen()),
+                    CustomPageRoute(page: IntroScreen()),
                   );
                 },
                 child: Text('Get Started', style: TextStyle(fontSize: 15, fontFamily: 'Montserrat', color: Colors.white)),
