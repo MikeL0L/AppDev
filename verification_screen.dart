@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:student_nav_system/main/custom_page_route.dart';
 import 'student_home_screen.dart';
 
 class VerificationScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
       // Navigate to the Student Home Screen if the email is valid
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => StudentHomeScreen(studentName: "Michael Andres Cabot")),
+        CustomPageRoute(page: StudentHomeScreen(studentName: "Michael Andres Cabot")),
       );
     } else {
       // Show an error message if the email is invalid
