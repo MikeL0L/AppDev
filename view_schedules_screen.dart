@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:student_nav_system/main/custom_page_route.dart';
 import 'add_schedule_screen.dart';
 import 'view_alerts_screen.dart';
 
@@ -46,8 +47,8 @@ class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => AddScheduleScreen(
+                CustomPageRoute(
+                  page: AddScheduleScreen(
                     onScheduleAdded: (newSchedule) {
                       widget.schedules.add(newSchedule);
                       _updateAlerts(newSchedule, true); // Add alert
@@ -63,8 +64,8 @@ class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => ViewAlertsScreen(alerts: alerts),
+                CustomPageRoute(
+                  page: ViewAlertsScreen(alerts: alerts),
                 ),
               );
             },
