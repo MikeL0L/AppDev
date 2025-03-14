@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:student_nav_system/main/custom_page_route.dart';
 import 'view_schedules_screen.dart';
 import 'view_alerts_screen.dart';
 import 'view_profile_screen.dart';
@@ -35,7 +36,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                  CustomPageRoute(page: LoginScreen()),
                 );
               },
               child: Text('Yes'),
@@ -117,7 +118,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
         if (navigateTo != null) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => navigateTo),
+            CustomPageRoute(page: navigateTo),
           );
         }
       },
