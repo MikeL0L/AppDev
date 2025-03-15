@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:student_nav_system/main/custom_page_route.dart';
 import 'student_home_screen.dart';
+import 'otp_screen.dart';
 
 class VerificationScreen extends StatefulWidget {
   @override
@@ -14,10 +15,10 @@ class _VerificationScreenState extends State<VerificationScreen> {
   void _verifyEmail() {
     String enteredEmail = _emailController.text.trim();
     if (enteredEmail == validEmail) {
-      // Navigate to the Student Home Screen if the email is valid
+      // Navigate to the OTP Screen if the email is valid
       Navigator.pushReplacement(
         context,
-        CustomPageRoute(page: StudentHomeScreen(studentName: "Michael Andres Cabot")),
+        CustomPageRoute(page: OTPScreen()),
       );
     } else {
       // Show an error message if the email is invalid
