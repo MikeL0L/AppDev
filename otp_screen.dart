@@ -56,8 +56,8 @@ class _OTPScreenState extends State<OTPScreen> {
               SizedBox(height: 20),
               OtpTextField(
                 numberOfFields: 6,
-                borderColor: Color(0xFFFF971A),
-                focusedBorderColor: Color(0xFFFFFF67),
+                borderColor: Colors.black,
+                focusedBorderColor: Colors.black,
                 showFieldAsBox: true,
                 onCodeChanged: (String code) {},
                 onSubmit: (String verificationCode) {
