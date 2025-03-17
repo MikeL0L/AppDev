@@ -1,12 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:student_nav_system/main/custom_page_route.dart';
 import 'view_emergency_contacts_screen.dart';
+import 'login_screen.dart';
 
-class GuestHomeScreen extends StatelessWidget {
+class GuestHomeScreen extends StatefulWidget {
+  @override
+  _GuestHomeScreenState createState() => _GuestHomeScreenState();
+}
+
+class _GuestHomeScreenState extends State<GuestHomeScreen> {
+  void _confirmLogout() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Log Out'),
+          content: Text('Log out from account?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  CustomPageRoute(page: LoginScreen()),
+                );
+              },
+              child: Text('Yes'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('No'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Welcome, Guest'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: _confirmLogout, // Show confirmation dialog on logout
+          ),
+        ],
+        centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
@@ -19,23 +62,24 @@ class GuestHomeScreen extends StatelessWidget {
               )
           ),
         ),
+        automaticallyImplyLeading: false,
       ),
       body: Container(
-      decoration: BoxDecoration(
-      image: DecorationImage(
-      image: AssetImage('assets/intro-background.png'),
-      fit: BoxFit.cover,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/intro-background.png'),
+            fit: BoxFit.cover,
+          ),
         ),
-      ),
-      child: GridView.count(
-        crossAxisCount: 2,
-        padding: EdgeInsets.all(16.0),
-        children: [
-          _buildGridButton(context, 'Emergency Contacts', Icons.security, ViewEmergencyContactsScreen()),
-          _buildGridButton(context, 'Campus Map', Icons.map, null), // Replace null with the actual screen
-          _buildGridButton(context, 'Help', Icons.help, null), // Replace null with the actual screen
-        ],
-      ),
+        child: GridView.count(
+          crossAxisCount: 2,
+          padding: EdgeInsets.all(16.0),
+          children: [
+            _buildGridButton(context, 'Emergency Contacts', Icons.security, ViewEmergencyContactsScreen()),
+            _buildGridButton(context, 'Campus Map', Icons.map, null), // Replace null with the actual screen
+            _buildGridButton(context, 'Help', Icons.help, null), // Replace null with the actual screen
+          ],
+        ),
       ),
     );
   }
@@ -46,7 +90,7 @@ class GuestHomeScreen extends StatelessWidget {
         if (navigateTo != null) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => navigateTo),
+            CustomPageRoute(page: navigateTo),
           );
         }
       },
