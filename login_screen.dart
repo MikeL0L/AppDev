@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
               controller: _idController,
               decoration: InputDecoration(
                 labelText: 'Enter Student ID',
-                labelStyle: TextStyle(fontSize: 15, color: Colors.black),
+                labelStyle: TextStyle(fontSize: 15, fontFamily: 'Poppins', color: Colors.black),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black),
                 ),
@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
               controller: _passwordController,
               decoration: InputDecoration(
                 labelText: 'Password',
-                labelStyle: TextStyle(fontSize: 15, color : Colors.black),
+                labelStyle: TextStyle(fontSize: 15, fontFamily: 'Poppins', color : Colors.black),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black),
                 ),
@@ -102,16 +102,16 @@ class _LoginScreenState extends State<LoginScreen> {
               cursorColor: Colors.black,
               obscureText: true,
             ),
-            Text('If not Student, Enter as Guest', style: TextStyle(fontSize: 13, color: Colors.black)),
+            Text('If not Student, Enter as Guest', style: TextStyle(fontSize: 13, fontFamily: 'Poppins', color: Colors.black)),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: _login,
-              child: Text('Login as Student', style: TextStyle(fontSize: 13, color: Colors.black)),
+              child: Text('Login as Student', style: TextStyle(fontSize: 13, fontFamily: 'Poppins', color: Colors.black)),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: _loginAsGuest,
-              child: Text('Guest', style: TextStyle(fontSize: 13, color: Colors.black)),
+              child: Text('Guest', style: TextStyle(fontSize: 13, fontFamily: 'Poppins', color: Colors.black)),
             ),
           ],
         ),
