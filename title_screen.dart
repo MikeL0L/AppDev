@@ -55,7 +55,6 @@ class TitleScreen extends StatelessWidget {
                 child: Text('Get Started', style: TextStyle(fontSize: 15, fontFamily: 'Montserrat', color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  textStyle: TextStyle(fontSize: 20, color: Colors.white),
                   backgroundColor: Color(0xFF0C4B77), // Button color
                 ),
               ),
