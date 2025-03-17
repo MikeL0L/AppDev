@@ -90,13 +90,13 @@ class _IntroScreenState extends State<IntroScreen> {
             if (showSkipButton)
               TextButton(
                 onPressed: _skipToLogin,
-                child: Text("Skip", style: TextStyle(fontSize: 20, color: Color(0xFF0C4B77)),
+                child: Text("Skip", style: TextStyle(fontSize: 20, fontFamily: 'Poppins', fontWeight: FontWeight.bold, color: Color(0xFF0C4B77)),
               ),
               ),
             if (isLastPage)
               ElevatedButton(
                 onPressed: _proceedToLogin,
-                child: Text("Proceed to Login", style: TextStyle(fontSize: 20, color: Colors.black)),
+                child: Text("Proceed to Login", style: TextStyle(fontSize: 15, fontFamily: 'Poppins', color: Colors.black)),
               ),
           ],
         ),
