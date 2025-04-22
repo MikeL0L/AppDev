@@ -28,7 +28,8 @@ class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Schedules'),
+        title: Text('Your Schedules', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', color: Colors.black)),
+        centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
@@ -75,7 +76,7 @@ class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
       body: Container(
       decoration: BoxDecoration(
       image: DecorationImage(
-      image: AssetImage('assets/intro-background.png'),
+      image: AssetImage('assets/features-background.png'),
       fit: BoxFit.cover,
         ),
         ),
