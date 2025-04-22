@@ -29,9 +29,9 @@ class ViewEmergencyContactsScreen extends StatelessWidget {
         ),
         child: ListView(
         children: [
-          ListTile(title: Text('Campus Security: 123-456-7890', style: TextStyle(color: Colors.black))),
-          ListTile(title: Text('Health Services: 987-654-3210', style: TextStyle(color: Colors.black))),
-          ListTile(title: Text('Counseling Center: 555-555-5555', style: TextStyle(color: Colors.black))),
+          ListTile(title: Text('Campus Security: 123-456-7890', style: TextStyle(fontFamily: 'Montserrat', color: Colors.black))),
+          ListTile(title: Text('Health Services: 987-654-3210', style: TextStyle(fontFamily: 'Montserrat', color: Colors.black))),
+          ListTile(title: Text('Counseling Center: 555-555-5555', style: TextStyle(fontFamily: 'Montserrat', color: Colors.black))),
           ],
         ),
         ),
