@@ -57,7 +57,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Welcome, ${widget.studentName}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+        title: Text('Welcome, ${widget.studentName}', style: TextStyle(fontSize: 17, fontFamily: 'Montserrat', fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -135,7 +135,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
             SizedBox(height: 10),
             Text(
               title,
-              style: TextStyle(color: Colors.white, fontSize: 18), // Change the font size here
+              style: TextStyle(fontFamily: 'Montserrat', color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold), // Change the font size here
             ),
           ],
         ),
