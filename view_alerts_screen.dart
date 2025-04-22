@@ -9,7 +9,8 @@ class ViewAlertsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Alerts'),
+        title: Text('View Alerts', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', color: Colors.black)),
+        centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
@@ -26,7 +27,7 @@ class ViewAlertsScreen extends StatelessWidget {
         body: Container(
         decoration: BoxDecoration(
         image: DecorationImage(
-        image: AssetImage('assets/intro-background.png'),
+        image: AssetImage('assets/features-background.png'),
         fit: BoxFit.cover,
           ),
         ),
