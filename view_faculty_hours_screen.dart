@@ -5,7 +5,8 @@ class ViewFacultyHoursScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Faculty Office Hours'),
+        title: Text('Faculty Office Hours', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', color: Colors.black)),
+        centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
@@ -22,7 +23,7 @@ class ViewFacultyHoursScreen extends StatelessWidget {
         body: Container(
         decoration: BoxDecoration(
         image: DecorationImage(
-        image: AssetImage('assets/intro-background.png'),
+        image: AssetImage('assets/features-background.png'),
         fit: BoxFit.cover,
             ),
         ),
