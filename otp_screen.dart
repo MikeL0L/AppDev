@@ -11,7 +11,7 @@ class OTPScreen extends StatefulWidget {
 class _OTPScreenState extends State<OTPScreen> {
   String otpCode = "";
   final String hardcodedOtp = "123456";
-  bool isLoadingConfirm = false; // added loading function 3-17-25
+  bool isLoadingConfirm = false;
   bool isLoadingResend = false;
 
   void handleConfirm() async {
@@ -26,7 +26,7 @@ class _OTPScreenState extends State<OTPScreen> {
       isLoadingConfirm = true;
     });
 
-    await Future.delayed(Duration(seconds: 2)); // Simulating OTP verification
+    await Future.delayed(Duration(seconds: 2));
 
     setState(() {
       isLoadingConfirm = false;
@@ -51,7 +51,7 @@ class _OTPScreenState extends State<OTPScreen> {
       isLoadingResend = true;
     });
 
-    await Future.delayed(Duration(seconds: 2)); // Simulating OTP resend
+    await Future.delayed(Duration(seconds: 2));
 
     setState(() {
       isLoadingResend = false;
@@ -65,99 +65,106 @@ class _OTPScreenState extends State<OTPScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/login-background.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Center(
-          child: Container(
-            margin: EdgeInsets.all(20),
-            padding: EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(colors:  [
-                Color(0xFFFF971A),
-                Color(0xFFFFFF67),
-              ],
-                  transform: GradientRotation(14)
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: Container(
+              height: constraints.maxHeight,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/login-background.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 10,
-                  spreadRadius: 2,
-                  offset: Offset(0, 5),
+              child: Center(
+                child: Container(
+                  margin: EdgeInsets.all(16),
+                  padding: EdgeInsets.all(20),
+                  constraints: BoxConstraints(maxWidth: 400),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFFFF971A), Color(0xFFFFFF67)],
+                      transform: GradientRotation(14),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                        offset: Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.verified_outlined, size: 50, color: Colors.green),
+                      SizedBox(height: 20),
+                      Text(
+                        "Verification Code",
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "Enter the 6-digit code sent to your email",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      SizedBox(height: 20),
+                      OtpTextField(
+                        numberOfFields: 6,
+                        borderColor: Colors.black,
+                        focusedBorderColor: Colors.black,
+                        showFieldAsBox: true,
+                        fieldWidth: 40,
+                        onCodeChanged: (String code) {},
+                        onSubmit: (String verificationCode) {
+                          setState(() {
+                            otpCode = verificationCode;
+                          });
+                        },
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: isLoadingConfirm ? null : handleConfirm,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                        ),
+                        child: isLoadingConfirm
+                            ? CircularProgressIndicator(color: Colors.black)
+                            : Text(
+                          "Confirm Code",
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 15,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: isLoadingResend ? null : handleResend,
+                        child: isLoadingResend
+                            ? CircularProgressIndicator(color: Color(0xFF0C4B77))
+                            : Text(
+                          "Resend Code",
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 15,
+                            color: Color(0xFF0C4B77),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.verified_outlined, size: 50, color: Colors.green),
-                SizedBox(height: 20),
-                Text(
-                  "Verification Code",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  "Enter the 6-digit code sent to your email",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.black),
-                ),
-                SizedBox(height: 20),
-                OtpTextField(
-                  numberOfFields: 6,
-                  borderColor: Colors.black,
-                  focusedBorderColor: Colors.black,
-                  showFieldAsBox: true,
-                  onCodeChanged: (String code) {},
-                  onSubmit: (String verificationCode) {
-                    setState(() {
-                      otpCode = verificationCode;
-                    });
-                  },
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: isLoadingConfirm ? null : handleConfirm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  ),
-                  child: isLoadingConfirm
-                      ? CircularProgressIndicator(color: Colors.black)
-                      : Text(
-                    "Confirm Code",
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 15,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: isLoadingResend ? null : handleResend,
-                  child: isLoadingResend
-                      ? CircularProgressIndicator(color: Color(0xFF0C4B77))
-                      : Text(
-                    "Resend Code",
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 15,
-                      color: Color(0xFF0C4B77),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
