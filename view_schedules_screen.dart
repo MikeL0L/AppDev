@@ -18,9 +18,7 @@ class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
   ];
 
   Map<String, List<String>> _groupSchedulesByDay(List<String> schedules) {
-    Map<String, List<String>> dayMap = {
-      for (var day in daysOfWeek) day: []
-    };
+    Map<String, List<String>> dayMap = { for (var day in daysOfWeek) day: [] };
     for (var schedule in schedules) {
       for (var day in daysOfWeek) {
         if (schedule.startsWith(day)) {
@@ -31,13 +29,69 @@ class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
     return dayMap;
   }
 
+  void _navigateToAddSchedule([String? day]) {
+    Navigator.push(
+      context,
+      CustomPageRoute(
+        page: AddScheduleScreen(
+          onScheduleAdded: (newSchedules) {
+            setState(() {
+              widget.schedules.addAll(newSchedules);
+              widget.onScheduleUpdated(widget.schedules);
+            });
+          },
+          prefillDay: day,
+        ),
+      ),
+    );
+  }
+
+  void _showScheduleDetailsDialog(String schedule) {
+    final parts = schedule.split(" - ");
+    final course = parts.length > 1 ? parts[1] : "Unknown";
+    final time = parts.length > 3 ? "${parts[2]} – ${parts[3]}" : "";
+    final room = parts.length > 4 ? parts[4] : "";
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(course, style: TextStyle(fontFamily: 'Montserrat')),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Time: $time", style: TextStyle(fontFamily: 'Montserrat')),
+            Text("Location: $room", style: TextStyle(fontFamily: 'Montserrat')),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Close"),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                widget.schedules.remove(schedule);
+                widget.onScheduleUpdated(widget.schedules);
+              });
+              Navigator.pop(context);
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: Text("Delete"),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final daySchedules = _groupSchedulesByDay(widget.schedules);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Schedules', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', color: Colors.black)),
+        title: Text('View Schedules', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', color: Colors.black)),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -49,26 +103,6 @@ class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                CustomPageRoute(
-                  page: AddScheduleScreen(
-                    onScheduleAdded: (newSchedules) {
-                      setState(() {
-                        widget.schedules.addAll(newSchedules);
-                        widget.onScheduleUpdated(widget.schedules);
-                      });
-                    },
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -100,20 +134,87 @@ class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
                   if (schedules.isEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 4.0, left: 10),
-                      child: Text(
-                        "add a schedule for this day",
-                        style: TextStyle(color: Colors.black.withOpacity(0.4), fontStyle: FontStyle.italic),
+                      child: GestureDetector(
+                        onTap: () => _navigateToAddSchedule(day),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.85),
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 3,
+                                offset: Offset(1, 1),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.add, size: 18, color: Colors.black.withOpacity(0.5)),
+                              SizedBox(width: 6),
+                              Text(
+                                "Add a schedule for this day",
+                                style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  color: Colors.black.withOpacity(0.6),
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     )
                   else
-                    ...schedules.map((schedule) {
+                    ...schedules.asMap().entries.map((entry) {
+                      final i = entry.key;
+                      final schedule = entry.value;
+
                       final parts = schedule.split(" - ");
                       final course = parts.length > 1 ? parts[1] : "Unknown";
-                      final time = parts.length > 3 ? "${parts[2]}–${parts[3]}" : "";
+                      final time = parts.length > 3 ? "${parts[2]} – ${parts[3]}" : "";
                       final room = parts.length > 4 ? parts[4] : "";
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 10.0, top: 4),
-                        child: Text("• $course - $time - $room", style: TextStyle(fontFamily: 'Montserrat', color: Colors.black)),
+
+                      return GestureDetector(
+                        onTap: () => _showScheduleDetailsDialog(schedule),
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 6, left: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.85),
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 4,
+                                offset: Offset(2, 2),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "$course   |   $time   |   $room",
+                                  style: TextStyle(fontFamily: 'Montserrat', color: Colors.black),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              if (i == schedules.length - 1)
+                                GestureDetector(
+                                  onTap: () => _navigateToAddSchedule(day),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Icon(Icons.add, size: 18, color: Colors.black.withOpacity(0.6)),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
                       );
                     }).toList(),
                 ],
