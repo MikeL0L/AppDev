@@ -1,126 +1,170 @@
 import 'package:flutter/material.dart';
-import 'package:student_nav_system/main/custom_page_route.dart';
-import 'add_schedule_screen.dart';
 
-class ViewSchedulesScreen extends StatefulWidget {
-  final List<String> schedules;
-  final Function(List<String>) onScheduleUpdated;
-
-  ViewSchedulesScreen({required this.schedules, required this.onScheduleUpdated});
-
-  @override
-  _ViewSchedulesScreenState createState() => _ViewSchedulesScreenState();
+class MeetingTime {
+  List<String> days = [];
+  TimeOfDay startTime = TimeOfDay(hour: 12, minute: 0);
+  TimeOfDay endTime = TimeOfDay(hour: 12, minute: 0);
+  String location = '';
 }
 
-class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
-  final List<String> daysOfWeek = [
-    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
-  ];
+class AddScheduleScreen extends StatefulWidget {
+  final Function(List<String>) onScheduleAdded;
+  final List<String>? existingSchedules;
 
-  Map<String, List<String>> _groupSchedulesByDay(List<String> schedules) {
-    Map<String, List<String>> dayMap = {
-      for (var day in daysOfWeek) day: []
-    };
-    for (var schedule in schedules) {
-      for (var day in daysOfWeek) {
-        if (schedule.startsWith(day)) {
-          dayMap[day]?.add(schedule);
-        }
+  AddScheduleScreen({required this.onScheduleAdded, this.existingSchedules});
+
+  @override
+  _AddScheduleScreenState createState() => _AddScheduleScreenState();
+}
+
+class _AddScheduleScreenState extends State<AddScheduleScreen> {
+  final TextEditingController _courseController = TextEditingController();
+  final List<MeetingTime> _meetingTimes = [MeetingTime()];
+
+  final List<String> days = ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"];
+  final List<String> fullDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+  Future<void> _selectTime(BuildContext context, TimeOfDay initialTime, Function(TimeOfDay) onSelected) async {
+    final picked = await showTimePicker(context: context, initialTime: initialTime);
+    if (picked != null) onSelected(picked);
+  }
+
+  Widget _buildMeetingCard(MeetingTime mt, int index) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 8),
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Wrap(
+              spacing: 6.0,
+              children: days.map((day) {
+                return FilterChip(
+                  label: Text(day),
+                  selected: mt.days.contains(day),
+                  onSelected: (selected) {
+                    setState(() {
+                      selected ? mt.days.add(day) : mt.days.remove(day);
+                    });
+                  },
+                );
+              }).toList(),
+            ),
+            SizedBox(height: 10),
+            Wrap(
+              spacing: 10,
+              runSpacing: 8,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("Start Time: "),
+                    TextButton(
+                      onPressed: () => _selectTime(context, mt.startTime, (time) {
+                        setState(() => mt.startTime = time);
+                      }),
+                      child: Text(mt.startTime.format(context)),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("End Time: "),
+                    TextButton(
+                      onPressed: () => _selectTime(context, mt.endTime, (time) {
+                        setState(() => mt.endTime = time);
+                      }),
+                      child: Text(mt.endTime.format(context)),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            TextField(
+              decoration: InputDecoration(labelText: 'Location'),
+              onChanged: (val) => mt.location = val,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _submitCourse() {
+    if (_courseController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Course title is required")));
+      return;
+    }
+
+    List<String> schedules = [];
+
+    for (var mt in _meetingTimes) {
+      for (var day in mt.days) {
+        final fullDay = fullDays[days.indexOf(day)];
+        schedules.add(
+            "$fullDay - ${_courseController.text} - ${mt.startTime.format(context)} - ${mt.endTime.format(context)} - ${mt.location}"
+        );
       }
     }
-    return dayMap;
+
+    widget.onScheduleAdded(schedules);
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final daySchedules = _groupSchedulesByDay(widget.schedules);
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Schedules', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', color: Colors.black)),
+        title: Text('Add Course', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', color: Colors.black)),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFFFF971A), Color(0xFFFFFF67)],
-              transform: GradientRotation(24),
-            ),
-          ),
+              gradient: LinearGradient(
+                  colors: [Color(0xFFFF971A), Color(0xFFFFFF67)],
+                  transform: GradientRotation(24))),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                CustomPageRoute(
-                  page: AddScheduleScreen(
-                    onScheduleAdded: (newSchedules) {
-                      setState(() {
-                        widget.schedules.addAll(newSchedules);
-                        widget.onScheduleUpdated(widget.schedules);
-                      });
-                    },
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/features-background.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: ListView.builder(
-          itemCount: daysOfWeek.length,
-          itemBuilder: (context, index) {
-            final day = daysOfWeek[index];
-            final schedules = daySchedules[day] ?? [];
-
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    day,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Montserrat',
-                      color: Colors.black,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 600),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextField(
+                      controller: _courseController,
+                      decoration: InputDecoration(labelText: 'Course Title (required)'),
                     ),
-                  ),
-                  if (schedules.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4.0, left: 10),
-                      child: Text(
-                        "add a schedule for this day",
-                        style: TextStyle(color: Colors.black.withOpacity(0.4), fontStyle: FontStyle.italic),
+                    SizedBox(height: 12),
+                    ..._meetingTimes.map((mt) => _buildMeetingCard(mt, _meetingTimes.indexOf(mt))).toList(),
+                    TextButton(
+                      onPressed: () {
+                        setState(() => _meetingTimes.add(MeetingTime()));
+                      },
+                      child: Text("Add Another Meeting Time"),
+                    ),
+                    SizedBox(height: 16),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: _submitCourse,
+                        child: Text('Add Course'),
                       ),
-                    )
-                  else
-                    ...schedules.map((schedule) {
-                      final parts = schedule.split(" - ");
-                      final course = parts.length > 1 ? parts[1] : "Unknown";
-                      final time = parts.length > 3 ? "${parts[2]}–${parts[3]}" : "";
-                      final room = parts.length > 4 ? parts[4] : "";
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 10.0, top: 4),
-                        child: Text("• $course - $time - $room", style: TextStyle(fontFamily: 'Montserrat', color: Colors.black)),
-                      );
-                    }).toList(),
-                ],
+                    ),
+                  ],
+                ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
