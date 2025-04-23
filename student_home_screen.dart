@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:student_nav_system/main/custom_page_route.dart';
 import 'view_schedules_screen.dart';
-import 'view_alerts_screen.dart';
+import 'view_help_screen.dart';
 import 'view_profile_screen.dart';
 import 'view_faculty_hours_screen.dart';
 import 'view_emergency_contacts_screen.dart';
@@ -95,7 +95,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
               schedules = updatedSchedules;
             });
           })),
-          _buildGridButton(context, 'View Alerts', Icons.notifications, ViewAlertsScreen(alerts: alerts)),
+          _buildGridButton(context, 'Help', Icons.help, ViewHelpScreen()),
           _buildGridButton(context, 'Profile', Icons.person, ViewProfileScreen(
             studentName: widget.studentName,
             studentId: studentId,
@@ -135,7 +135,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
             SizedBox(height: 10),
             Text(
               title,
-              style: TextStyle(fontFamily: 'Montserrat', color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold), // Change the font size here
+              style: TextStyle(fontFamily: 'Montserrat', color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold), // Change the font size here
             ),
           ],
         ),
