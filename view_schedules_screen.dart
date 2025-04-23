@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:student_nav_system/main/custom_page_route.dart';
 import 'add_schedule_screen.dart';
-import 'view_alerts_screen.dart';
 
 class ViewSchedulesScreen extends StatefulWidget {
   final List<String> schedules;
@@ -14,18 +13,28 @@ class ViewSchedulesScreen extends StatefulWidget {
 }
 
 class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
-  List<String> alerts = [];
+  final List<String> daysOfWeek = [
+    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+  ];
 
-  void _updateAlerts(String schedule, bool isAdding) {
-    if (isAdding) {
-      alerts.add("Upcoming: $schedule");
-    } else {
-      alerts.remove("Upcoming: $schedule");
+  Map<String, List<String>> _groupSchedulesByDay(List<String> schedules) {
+    Map<String, List<String>> dayMap = {
+      for (var day in daysOfWeek) day: []
+    };
+    for (var schedule in schedules) {
+      for (var day in daysOfWeek) {
+        if (schedule.startsWith(day)) {
+          dayMap[day]?.add(schedule);
+        }
+      }
     }
+    return dayMap;
   }
 
   @override
   Widget build(BuildContext context) {
+    final daySchedules = _groupSchedulesByDay(widget.schedules);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Schedules', style: TextStyle(fontSize: 20, fontFamily: 'Montserrat', color: Colors.black)),
@@ -34,12 +43,10 @@ class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
         elevation: 0,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-              gradient: LinearGradient(colors:  [
-                Color(0xFFFF971A),
-                Color(0xFFFFFF67),
-              ],
-                  transform: GradientRotation(24)
-              )
+            gradient: LinearGradient(
+              colors: [Color(0xFFFF971A), Color(0xFFFFFF67)],
+              transform: GradientRotation(24),
+            ),
           ),
         ),
         actions: [
@@ -50,23 +57,13 @@ class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
                 context,
                 CustomPageRoute(
                   page: AddScheduleScreen(
-                    onScheduleAdded: (newSchedule) {
-                      widget.schedules.add(newSchedule);
-                      _updateAlerts(newSchedule, true); // Add alert
-                      widget.onScheduleUpdated(widget.schedules);
+                    onScheduleAdded: (newSchedules) {
+                      setState(() {
+                        widget.schedules.addAll(newSchedules);
+                        widget.onScheduleUpdated(widget.schedules);
+                      });
                     },
                   ),
-                ),
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.notifications),
-            onPressed: () {
-              Navigator.push(
-                context,
-                CustomPageRoute(
-                  page: ViewAlertsScreen(alerts: alerts),
                 ),
               );
             },
@@ -74,52 +71,56 @@ class _ViewSchedulesScreenState extends State<ViewSchedulesScreen> {
         ],
       ),
       body: Container(
-      decoration: BoxDecoration(
-      image: DecorationImage(
-      image: AssetImage('assets/features-background.png'),
-      fit: BoxFit.cover,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/features-background.png'),
+            fit: BoxFit.cover,
+          ),
         ),
-        ),
-      child: ListView.builder(
-        itemCount: widget.schedules.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(widget.schedules[index], style: TextStyle(color: Colors.black)),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.edit, color: Colors.black),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddScheduleScreen(
-                          onScheduleAdded: (updatedSchedule) {
-                            _updateAlerts(widget.schedules[index], false); // Remove old alert
-                            widget.schedules[index] = updatedSchedule;
-                            _updateAlerts(updatedSchedule, true); // Add new alert
-                            widget.onScheduleUpdated(widget.schedules);
-                          },
-                          existingSchedule: widget.schedules[index],
-                        ),
+        child: ListView.builder(
+          itemCount: daysOfWeek.length,
+          itemBuilder: (context, index) {
+            final day = daysOfWeek[index];
+            final schedules = daySchedules[day] ?? [];
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    day,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat',
+                      color: Colors.black,
+                    ),
+                  ),
+                  if (schedules.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0, left: 10),
+                      child: Text(
+                        "add a schedule for this day",
+                        style: TextStyle(color: Colors.black.withOpacity(0.4), fontStyle: FontStyle.italic),
                       ),
-                    );
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
-                  onPressed: () {
-                    _updateAlerts(widget.schedules[index], false); // Remove alert
-                    widget.schedules.removeAt(index);
-                    widget.onScheduleUpdated(widget.schedules);
-                  },
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+                    )
+                  else
+                    ...schedules.map((schedule) {
+                      final parts = schedule.split(" - ");
+                      final course = parts.length > 1 ? parts[1] : "Unknown";
+                      final time = parts.length > 3 ? "${parts[2]}–${parts[3]}" : "";
+                      final room = parts.length > 4 ? parts[4] : "";
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 10.0, top: 4),
+                        child: Text("• $course - $time - $room", style: TextStyle(fontFamily: 'Montserrat', color: Colors.black)),
+                      );
+                    }).toList(),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
