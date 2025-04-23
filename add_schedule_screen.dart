@@ -9,9 +9,9 @@ class MeetingTime {
 
 class AddScheduleScreen extends StatefulWidget {
   final Function(List<String>) onScheduleAdded;
-  final List<String>? existingSchedules;
+  final String? prefillDay;
 
-  AddScheduleScreen({required this.onScheduleAdded, this.existingSchedules});
+  AddScheduleScreen({required this.onScheduleAdded, this.prefillDay});
 
   @override
   _AddScheduleScreenState createState() => _AddScheduleScreenState();
@@ -21,15 +21,22 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
   final TextEditingController _courseController = TextEditingController();
   final List<MeetingTime> _meetingTimes = [MeetingTime()];
 
-  final List<String> days = ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"];
-  final List<String> fullDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  final List<String> days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.prefillDay != null) {
+      _meetingTimes.first.days.add(widget.prefillDay!);
+    }
+  }
 
   Future<void> _selectTime(BuildContext context, TimeOfDay initialTime, Function(TimeOfDay) onSelected) async {
     final picked = await showTimePicker(context: context, initialTime: initialTime);
     if (picked != null) onSelected(picked);
   }
 
-  Widget _buildMeetingCard(MeetingTime mt, int index) {
+  Widget _buildMeetingCard(MeetingTime mt) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 8),
       elevation: 2,
@@ -56,7 +63,6 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
             Wrap(
               spacing: 10,
               runSpacing: 8,
-              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -95,7 +101,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
   }
 
   void _submitCourse() {
-    if (_courseController.text.isEmpty) {
+    if (_courseController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Course title is required")));
       return;
     }
@@ -104,9 +110,8 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
 
     for (var mt in _meetingTimes) {
       for (var day in mt.days) {
-        final fullDay = fullDays[days.indexOf(day)];
         schedules.add(
-            "$fullDay - ${_courseController.text} - ${mt.startTime.format(context)} - ${mt.endTime.format(context)} - ${mt.location}"
+            "$day - ${_courseController.text.trim()} - ${mt.startTime.format(context)} - ${mt.endTime.format(context)} - ${mt.location.trim()}"
         );
       }
     }
@@ -125,46 +130,39 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
         elevation: 0,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [Color(0xFFFF971A), Color(0xFFFFFF67)],
-                  transform: GradientRotation(24))),
+            gradient: LinearGradient(
+              colors: [Color(0xFFFF971A), Color(0xFFFFFF67)],
+              transform: GradientRotation(24),
+            ),
+          ),
         ),
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 600),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextField(
-                      controller: _courseController,
-                      decoration: InputDecoration(labelText: 'Course Title (required)'),
-                    ),
-                    SizedBox(height: 12),
-                    ..._meetingTimes.map((mt) => _buildMeetingCard(mt, _meetingTimes.indexOf(mt))).toList(),
-                    TextButton(
-                      onPressed: () {
-                        setState(() => _meetingTimes.add(MeetingTime()));
-                      },
-                      child: Text("Add Another Meeting Time"),
-                    ),
-                    SizedBox(height: 16),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: _submitCourse,
-                        child: Text('Add Course'),
-                      ),
-                    ),
-                  ],
-                ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _courseController,
+              decoration: InputDecoration(labelText: 'Course Title (required)'),
+            ),
+            SizedBox(height: 12),
+            ..._meetingTimes.map((mt) => _buildMeetingCard(mt)).toList(),
+            TextButton(
+              onPressed: () {
+                setState(() => _meetingTimes.add(MeetingTime()));
+              },
+              child: Text("Add Another Meeting Time"),
+            ),
+            SizedBox(height: 16),
+            Center(
+              child: ElevatedButton(
+                onPressed: _submitCourse,
+                child: Text('Add Course'),
               ),
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
   }
