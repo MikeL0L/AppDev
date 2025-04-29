@@ -6,6 +6,7 @@ import 'view_profile_screen.dart';
 import 'view_faculty_hours_screen.dart';
 import 'view_emergency_contacts_screen.dart';
 import 'login_screen.dart';
+import 'campus_map_screen.dart';
 
 class StudentHomeScreen extends StatefulWidget {
   final String studentName;
@@ -105,7 +106,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
           )),
           _buildGridButton(context, 'Faculty Hours', Icons.access_time, ViewFacultyHoursScreen()),
           _buildGridButton(context, 'Emergency Contacts', Icons.security, ViewEmergencyContactsScreen()),
-          _buildGridButton(context, 'Campus Map', Icons.map, null), // Replace null with the actual screen
+          _buildGridButton(context, 'Campus Map', Icons.map, CampusMapScreen()), // Replace null with the actual screen
         ],
       ),
       ),
