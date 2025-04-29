@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:student_nav_system/main/custom_page_route.dart';
 import 'view_emergency_contacts_screen.dart';
 import 'view_help_screen.dart';
+import 'campus_map_screen.dart';
 import 'login_screen.dart';
 
 class GuestHomeScreen extends StatefulWidget {
@@ -77,7 +78,7 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
           padding: EdgeInsets.all(16.0),
           children: [
             _buildGridButton(context, 'Emergency Contacts', Icons.security, ViewEmergencyContactsScreen()),
-            _buildGridButton(context, 'Campus Map', Icons.map, null), // Replace null with the actual screen
+            _buildGridButton(context, 'Campus Map', Icons.map, CampusMapScreen()), // Replace null with the actual screen
             _buildGridButton(context, 'Help', Icons.help, ViewHelpScreen()),
           ],
         ),
